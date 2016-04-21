@@ -4,11 +4,12 @@ GetDevicePublicKey = require '../'
 
 describe 'GetDevicePublicKey', ->
   beforeEach (done) ->
+    database = mongojs 'meshblu-core-task-update-device', ['devices']
     @datastore = new Datastore
-      database: mongojs('meshblu-core-task-update-device')
+      database: database
       collection: 'devices'
 
-    @datastore.remove done
+    database.devices.remove done
 
   beforeEach ->
     @uuidAliasResolver = resolve: (uuid, callback) => callback(null, uuid)
