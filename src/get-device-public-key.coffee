@@ -9,7 +9,11 @@ class GetDevicePublicKey
     @uuidAliasResolver.resolve toUuid, (error, uuid) =>
       return callback error if error?
 
-      @datastore.findOne {uuid}, (error, result) =>
+      projection =
+        uuid: true
+        publicKey: true
+
+      @datastore.findOne {uuid}, projection, (error, result) =>
         return callback error if error?
         return callback null, metadata: code: 404 unless result?
 
