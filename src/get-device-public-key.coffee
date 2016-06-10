@@ -1,29 +1,28 @@
-http = require 'http'
+http          = require 'http'
+DeviceManager = require 'meshblu-core-manager-device'
 
 class GetDevicePublicKey
-  constructor: ({@datastore,@uuidAliasResolver}) ->
+  constructor: ({datastore,uuidAliasResolver}) ->
+    @deviceManager = new DeviceManager {datastore, uuidAliasResolver}
 
   do: (job, callback) =>
-    {toUuid} = job.metadata
+    { toUuid } = job.metadata
 
-    @uuidAliasResolver.resolve toUuid, (error, uuid) =>
+    projection =
+      uuid: true
+      publicKey: true
+
+    @deviceManager.findOne { uuid: toUuid, projection }, (error, device) =>
       return callback error if error?
+      return callback null, metadata: code: 404 unless device?
 
-      projection =
-        uuid: true
-        publicKey: true
+      response =
+        metadata:
+          code: 200
+        data:
+          uuid: device.uuid
+          publicKey: device.publicKey
 
-      @datastore.findOne {uuid}, projection, (error, result) =>
-        return callback error if error?
-        return callback null, metadata: code: 404 unless result?
-
-        response =
-          metadata:
-            code: 200
-          data:
-            uuid: result.uuid
-            publicKey: result.publicKey
-
-        return callback null, response
+      return callback null, response
 
 module.exports = GetDevicePublicKey

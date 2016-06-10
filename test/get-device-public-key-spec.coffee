@@ -58,4 +58,7 @@ describe 'GetDevicePublicKey', ->
           expect(@response.metadata.code).to.equal 200
 
         it 'should return the data', ->
-          expect(@response.data).to.contain publicKey: 'this-is-my-public-key'
+          expect(@response.data).to.deep.equal {
+            uuid: 'thank-you-for-considering'
+            publicKey: 'this-is-my-public-key'
+          }

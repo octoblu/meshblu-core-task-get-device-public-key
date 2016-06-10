@@ -1,12 +1,14 @@
 {
   "name": "meshblu-core-task-get-device-public-key",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Get Public Key for a Device",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "meshblu-core-manager-device": "^2.4.6"
+  },
   "devDependencies": {
     "chai": "^3.4.1",
     "coffee-coverage": "^0.7.0",
